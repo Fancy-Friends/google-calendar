@@ -1,0 +1,19 @@
+{
+  "$comment": "A Channel resource as events.watch answers it: the id and token that were sent, Google's resourceId and resourceUri, and `expiration` as epoch MILLISECONDS in a STRING. The expiration is fixed rather than drawn so the lease a host builds from the fake is the same one every time: 1789430400000 is 2026-09-15T00:00:00Z.",
+  "operation": "channel_watch",
+
+  "values": {
+    "$comment": "Echoed once each. The id and the token come back exactly as sent, so they are read from config and drawn only when the config is empty.",
+    "channelId": { "$config": "channelId", "as": "string", "fallback": { "$fake": "uuid" } },
+    "token": { "$config": "token", "as": "string", "fallback": { "$fake": "id", "prefix": "tok" } }
+  },
+
+  "response": {
+    "kind": "api#channel",
+    "id": { "$ref": "channelId" },
+    "resourceId": { "$fake": "id", "prefix": "o3hgv1538sdjfh" },
+    "resourceUri": "https://www.googleapis.com/calendar/v3/calendars/primary/events?alt=json",
+    "token": { "$ref": "token" },
+    "expiration": "1789430400000"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "$comment": "channels.stop -> POST calendar/v3/channels/stop, request Channel (id + resourceId), EMPTY response. The action a subscription trigger's `stop` names. Google: \"If successful, this method returns an empty response body.\"",
+  "operation": "channel_stop",
+  "kind": "channel_stop",
+  "title": "Google Calendar stop watching",
+  "description": "Close a push-notification channel. The host's subscription machinery calls this before re-creating a channel and when a trigger is removed.",
+  "summary": "stop a channel",
+  "docs": "https://developers.google.com/workspace/calendar/api/v3/reference/channels/stop",
+  "sideEffects": "idempotent",
+
+  "$sideEffectsComment": "Stopping a channel that is already stopped or expired is refused with a 404 rather than doing anything twice, so a retry cannot compound -- which is what idempotent means here.",
+
+  "request": {
+    "method": "POST",
+    "path": "/calendar/v3/channels/stop",
+    "encoding": "json"
+  },
+
+  "config": [
+    {
+      "type": "text",
+      "key": "channelId",
+      "label": "Channel ID",
+      "required": true,
+      "description": "The channel's id, as sent to channel_watch.",
+      "send": { "as": "id", "value": "string" }
+    },
+    {
+      "type": "text",
+      "key": "resourceId",
+      "label": "Resource ID",
+      "required": true,
+      "description": "The resourceId channel_watch answered with. Both are needed; Google refuses a stop with only one.",
+      "send": { "as": "resourceId", "value": "string" }
+    }
+  ],
+
+  "outputShape": [
+    { "path": "mode", "type": "string", "description": "Which estate this ran against. Google answers with an empty body, so this is the only thing published." }
+  ],
+
+  "contract": {
+    "sends": ["id", "resourceId"],
+    "reads": []
+  }
+}

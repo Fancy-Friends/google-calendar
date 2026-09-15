@@ -1,0 +1,6 @@
+{
+  "$comment": "channels.stop answers with an EMPTY body. The fake answers the same way, so a host wired against it learns there is nothing to read.",
+  "operation": "channel_stop",
+
+  "response": {}
+}

@@ -1,0 +1,65 @@
+{
+  "$comment": "A push notification on a watched calendar. Read from https://developers.google.com/workspace/calendar/api/guides/push, checked 2026-09-15: Google POSTs to the channel's address with an EMPTY body and the facts in headers -- X-Goog-Channel-ID, X-Goog-Message-Number, X-Goog-Resource-ID, X-Goog-Resource-State (sync | exists | not_exists), X-Goog-Resource-URI, and sometimes X-Goog-Channel-Expiration and X-Goog-Channel-Token. A notification says THAT something changed, never what: the host lists with its sync token to find out.",
+  "operation": "events_changed",
+  "kind": "events_changed_trigger",
+  "title": "Google Calendar change",
+  "description": "Start a run when something changes on a watched Google Calendar.",
+  "summary": "a calendar change",
+  "icon": "📅",
+  "docs": "https://developers.google.com/workspace/calendar/api/guides/push",
+
+  "sideEffects": "none",
+  "delivery": "subscription",
+  "subscriptionTtl": 604800,
+  "$subscriptionTtlComment": "One week: Google's default `params.ttl` for a Calendar channel, and no maximum is documented. channel_watch asks for exactly this.",
+  "setup": "The host mints a UUID, calls channel_watch with it, its own URL for this trigger and the connection's channelToken, and stores the returned id, resourceId and expiration. Google cannot renew a channel: 86400 seconds before it expires the host calls channel_stop and then channel_watch again. A channel that lapsed is re-listed FIRST (event_list with the stored syncToken; a 410 means list in full) and then re-created, because notifications during the gap are gone. Google delivers with an EMPTY body: the host verifies X-Goog-Channel-Token against the connection's channelToken and injects the X-Goog-* headers as the event, camel-cased as below. The first message on a new channel is `sync` and carries no change.",
+
+  "subscription": {
+    "create": "channel_watch",
+    "renew": null,
+    "stop": "channel_stop",
+    "expiresAtFrom": "expiration",
+    "expiresAtUnit": "epoch-ms",
+    "renewBeforeSeconds": 86400,
+    "$renewComment": "null, and on purpose: Google -- \"Currently, there's no automatic way to renew a notification channel. When a channel is close to its expiration, you must replace it with a new one by calling the watch method.\" The lease's renewOperation is therefore channel_watch again."
+  },
+
+  "verification": {
+    "scheme": "shared-token",
+    "in": "header",
+    "name": "X-Goog-Channel-Token",
+    "secretCredential": "channelToken",
+    "$comment": "Google does not sign notifications. The token the host sent on channel_watch comes back in this header, and comparing it with the connection's channelToken is the whole of what authenticates a delivery. An empty body means there is nothing else to check."
+  },
+
+  "config": [
+    {
+      "type": "select",
+      "key": "sample",
+      "label": "Sample state (fake mode)",
+      "default": "exists",
+      "description": "Which resource state the faked notification carries: `exists` is a change, `sync` is the first message on a new channel, `not_exists` is the resource going away.",
+      "options": [
+        { "value": "exists", "label": "exists — something changed" },
+        { "value": "sync", "label": "sync — the channel just opened" },
+        { "value": "not_exists", "label": "not_exists — the resource is gone" }
+      ]
+    }
+  ],
+
+  "defaultConfig": { "mode": "auto", "sample": "exists" },
+
+  "outputShape": [
+    { "path": "channelId", "type": "string", "description": "X-Goog-Channel-ID: which channel this came from." },
+    { "path": "messageNumber", "type": "string", "description": "X-Goog-Message-Number: increases per channel; 1 is the sync message." },
+    { "path": "resourceId", "type": "string", "description": "X-Goog-Resource-ID: the watched resource." },
+    { "path": "resourceState", "type": "string", "description": "X-Goog-Resource-State: sync, exists or not_exists. `sync` carries no change." },
+    { "path": "resourceUri", "type": "string", "description": "X-Goog-Resource-URI: the watched resource's URI." },
+    { "path": "channelExpiration", "type": "string", "description": "X-Goog-Channel-Expiration, when Google sends it: the channel's expiry in a human-readable format, not an instant to compute with." }
+  ],
+
+  "contract": {
+    "sends": [],
+    "reads": []
+  }
+}

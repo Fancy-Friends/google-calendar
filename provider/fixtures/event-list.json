@@ -1,0 +1,35 @@
+{
+  "$comment": "An Events resource: the envelope Google lists with, and one event inside it shaped exactly like event_get's. nextSyncToken is present because this is the last (only) page -- an author wiring the incremental loop against the fake must find it where a real last page carries it.",
+  "operation": "event_list",
+
+  "response": {
+    "kind": "calendar#events",
+    "etag": "\"p33cd9r3ab8ne20g\"",
+    "summary": "ada@example.test",
+    "updated": "2026-09-10T15:30:00.000Z",
+    "timeZone": "UTC",
+    "accessRole": "owner",
+    "defaultReminders": [{ "method": "popup", "minutes": 10 }],
+    "nextSyncToken": { "$fake": "id", "prefix": "CPDSyncToken" },
+    "items": [
+      {
+        "kind": "calendar#event",
+        "etag": "\"3456789012345678\"",
+        "id": { "$fake": "id", "prefix": "evt" },
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=ZmFrZQ",
+        "created": "2026-09-01T09:00:00.000Z",
+        "updated": "2026-09-10T15:30:00.000Z",
+        "summary": "Design review",
+        "creator": { "email": "ada@example.test" },
+        "organizer": { "email": "ada@example.test" },
+        "start": { "dateTime": "2026-09-22T14:00:00+00:00", "timeZone": "UTC" },
+        "end": { "dateTime": "2026-09-22T15:00:00+00:00", "timeZone": "UTC" },
+        "iCalUID": { "$fake": "uuid" },
+        "sequence": 0,
+        "reminders": { "useDefault": true },
+        "eventType": "default"
+      }
+    ]
+  }
+}

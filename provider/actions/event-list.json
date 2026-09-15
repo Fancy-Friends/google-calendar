@@ -1,0 +1,87 @@
+{
+  "$comment": "events.list -> GET calendar/v3/calendars/{calendarId}/events, response Events. Read from the discovery document; the sync-token rules from https://developers.google.com/workspace/calendar/api/guides/sync.",
+  "operation": "event_list",
+  "kind": "event_list",
+  "title": "Google Calendar events",
+  "description": "List events from a Google Calendar, in full or incrementally with a sync token.",
+  "summary": "list events",
+  "docs": "https://developers.google.com/workspace/calendar/api/v3/reference/events/list",
+  "sideEffects": "none",
+
+  "request": {
+    "method": "GET",
+    "path": "/calendar/v3/calendars/{calendarId}/events"
+  },
+
+  "config": [
+    {
+      "type": "text",
+      "key": "calendarId",
+      "label": "Calendar ID",
+      "required": true,
+      "default": "primary",
+      "description": "`primary` for the connected account's own calendar, or a calendar's id.",
+      "send": { "in": "path", "as": "calendarId", "value": "string" }
+    },
+    {
+      "type": "text",
+      "key": "syncToken",
+      "label": "Sync token",
+      "description": "From a previous list's nextSyncToken. With one set, Google returns ONLY what changed since -- including deletions, as cancelled events. Leave blank for a full list.",
+      "send": { "in": "query", "as": "syncToken", "value": "string", "omitEmpty": true },
+      "$comment": "Google: \"The set of query parameters that can be used on incremental syncs is restricted. Each list request should use the same set of query parameters, including the initial request.\" timeMin, timeMax and orderBy are refused beside a sync token, and a 410 Gone means the token is invalid -- the host wipes its store and lists in full again. That 410 is exactly what a missed subscription lease leads to, which is why this action exists beside the trigger."
+    },
+    {
+      "type": "text",
+      "key": "timeMin",
+      "label": "From",
+      "description": "RFC 3339 lower bound on an event's END time, e.g. 2026-09-15T00:00:00Z. Not allowed together with a sync token.",
+      "send": { "in": "query", "as": "timeMin", "value": "string", "omitEmpty": true }
+    },
+    {
+      "type": "text",
+      "key": "timeMax",
+      "label": "To",
+      "description": "RFC 3339 upper bound on an event's START time. Not allowed together with a sync token.",
+      "send": { "in": "query", "as": "timeMax", "value": "string", "omitEmpty": true }
+    },
+    {
+      "type": "number",
+      "key": "maxResults",
+      "label": "Page size",
+      "min": 1,
+      "max": 2500,
+      "default": 250,
+      "description": "Events per page. Google's default is 250 and its maximum 2500; a nextPageToken means there are more.",
+      "send": { "in": "query", "as": "maxResults", "value": "integer", "min": 1, "max": 2500, "default": 250 }
+    },
+    {
+      "type": "text",
+      "key": "pageToken",
+      "label": "Page token",
+      "description": "From a previous page's nextPageToken.",
+      "send": { "in": "query", "as": "pageToken", "value": "string", "omitEmpty": true }
+    },
+    {
+      "type": "switch",
+      "key": "singleEvents",
+      "label": "Expand recurring events",
+      "default": true,
+      "description": "Return each occurrence of a recurring event as its own item, rather than the series once.",
+      "send": { "in": "query", "as": "singleEvents", "value": "boolean" }
+    }
+  ],
+
+  "outputShape": [
+    { "path": "data.items", "type": "array", "description": "The events on this page, each shaped like event_get's output." },
+    { "path": "data.nextPageToken", "type": "string", "description": "Present when there is another page." },
+    { "path": "data.nextSyncToken", "type": "string", "description": "Present on the LAST page only. Store it and pass it as syncToken next time to get only what changed." },
+    { "path": "data.updated", "type": "string", "description": "RFC 3339 last modification of the calendar." },
+    { "path": "mode", "type": "string", "description": "Which estate this ran against. Google has no sandbox, so: fake or live." }
+  ],
+
+  "contract": {
+    "sends": ["calendarId", "syncToken", "timeMin", "timeMax", "maxResults", "pageToken", "singleEvents"],
+    "reads": ["items", "nextPageToken", "nextSyncToken", "updated"]
+  }
+}

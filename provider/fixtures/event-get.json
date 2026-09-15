@@ -1,0 +1,32 @@
+{
+  "$comment": "An Event resource, reproduced rather than flattened -- an author who wires {{ $json.data.start.dateTime }} against the fake must find the same path when a real event arrives. Shape from the discovery document.",
+  "operation": "event_get",
+
+  "values": {
+    "eventId": { "$config": "eventId", "as": "string", "fallback": { "$fake": "id", "prefix": "evt" } }
+  },
+
+  "response": {
+    "kind": "calendar#event",
+    "etag": "\"3456789012345678\"",
+    "id": { "$ref": "eventId" },
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event?eid=ZmFrZQ",
+    "created": "2026-09-01T09:00:00.000Z",
+    "updated": "2026-09-10T15:30:00.000Z",
+    "summary": "Design review",
+    "description": "Quarterly design review with the platform team.",
+    "creator": { "email": "ada@example.test" },
+    "organizer": { "email": "ada@example.test" },
+    "start": { "dateTime": "2026-09-22T14:00:00+00:00", "timeZone": "UTC" },
+    "end": { "dateTime": "2026-09-22T15:00:00+00:00", "timeZone": "UTC" },
+    "iCalUID": { "$fake": "uuid" },
+    "sequence": 0,
+    "attendees": [
+      { "email": "ada@example.test", "organizer": true, "responseStatus": "accepted" },
+      { "email": "grace@example.test", "responseStatus": "needsAction" }
+    ],
+    "reminders": { "useDefault": true },
+    "eventType": "default"
+  }
+}

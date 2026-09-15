@@ -1,0 +1,54 @@
+{
+  "$comment": "events.get -> GET calendar/v3/calendars/{calendarId}/events/{eventId}, response Event. Read from the discovery document.",
+  "operation": "event_get",
+  "kind": "event_get",
+  "title": "Google Calendar event",
+  "description": "Read one event from a Google Calendar.",
+  "summary": "read an event",
+  "docs": "https://developers.google.com/workspace/calendar/api/v3/reference/events/get",
+  "sideEffects": "none",
+
+  "request": {
+    "method": "GET",
+    "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}"
+  },
+
+  "config": [
+    {
+      "type": "text",
+      "key": "calendarId",
+      "label": "Calendar ID",
+      "required": true,
+      "default": "primary",
+      "description": "`primary` for the connected account's own calendar, or a calendar's id (usually an email address).",
+      "send": { "in": "path", "as": "calendarId", "value": "string" },
+      "$comment": "A calendar id is an EMAIL ADDRESS for most calendars, and `@` and `#` are legal in one (group calendars end in @group.calendar.google.com). Every emitter URL-encodes a path value, so it cannot change which URL is called."
+    },
+    {
+      "type": "text",
+      "key": "eventId",
+      "label": "Event ID",
+      "required": true,
+      "description": "The event's id, as published by another node or by a notification's follow-up list.",
+      "send": { "in": "path", "as": "eventId", "value": "string" }
+    }
+  ],
+
+  "outputShape": [
+    { "path": "data.id", "type": "string", "description": "The event id." },
+    { "path": "data.status", "type": "string", "description": "confirmed, tentative or cancelled." },
+    { "path": "data.summary", "type": "string", "description": "The title." },
+    { "path": "data.description", "type": "string", "description": "The description, when there is one." },
+    { "path": "data.start.dateTime", "type": "string", "description": "RFC 3339 start. All-day events carry start.date instead." },
+    { "path": "data.end.dateTime", "type": "string", "description": "RFC 3339 end. All-day events carry end.date instead." },
+    { "path": "data.htmlLink", "type": "string", "description": "The event in the Google Calendar UI." },
+    { "path": "data.updated", "type": "string", "description": "RFC 3339 last modification." },
+    { "path": "data.organizer.email", "type": "string", "description": "Who organises it." },
+    { "path": "mode", "type": "string", "description": "Which estate this ran against. Google has no sandbox, so: fake or live." }
+  ],
+
+  "contract": {
+    "sends": ["calendarId", "eventId"],
+    "reads": ["id", "status", "summary", "description", "start", "end", "htmlLink", "updated", "organizer"]
+  }
+}

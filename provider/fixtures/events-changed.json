@@ -1,0 +1,17 @@
+{
+  "$comment": "The event the host injects: Google's X-Goog-* notification headers, camel-cased, because the body is EMPTY. The state comes from the `sample` config so the sync message can be designed against too -- it is the one an author most often forgets to ignore.",
+  "operation": "events_changed",
+
+  "values": {
+    "channelId": { "$fake": "uuid" }
+  },
+
+  "response": {
+    "channelId": { "$ref": "channelId" },
+    "messageNumber": "2",
+    "resourceId": { "$fake": "id", "prefix": "o3hgv1538sdjfh" },
+    "resourceState": { "$config": "sample", "as": "string", "default": "exists" },
+    "resourceUri": "https://www.googleapis.com/calendar/v3/calendars/primary/events?alt=json",
+    "channelExpiration": "Tue, 15 Sep 2026 00:00:00 GMT"
+  }
+}

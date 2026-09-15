@@ -1,0 +1,83 @@
+{
+  "$comment": "events.watch -> POST calendar/v3/calendars/{calendarId}/events/watch, request Channel, response Channel. The action a subscription trigger's `create` names: the HOST calls it with a fresh channel id, its own URL and the connection's channelToken, and reads the lease from the response's `expiration` (epoch MILLISECONDS, as a string). Google: \"there's no automatic way to renew a notification channel\" -- so it is also what the host calls again when the lease is due.",
+  "operation": "channel_watch",
+  "kind": "channel_watch",
+  "title": "Google Calendar watch",
+  "description": "Open a push-notification channel on a calendar's events. The host's subscription machinery calls this; it is not a node most workflows need.",
+  "summary": "watch a calendar",
+  "docs": "https://developers.google.com/workspace/calendar/api/v3/reference/events/watch",
+  "sideEffects": "unsafe-to-replay",
+
+  "$idempotencyComment": "Google offers no idempotency key on events.watch. A retried call with the SAME channel id is refused (the id must be unique), and with a fresh id it opens a SECOND channel that delivers duplicates until it expires. Honestly unsafe-to-replay; the host stops a channel it is not sure about.",
+
+  "request": {
+    "method": "POST",
+    "path": "/calendar/v3/calendars/{calendarId}/events/watch",
+    "encoding": "json",
+    "constants": {
+      "type": "web_hook",
+      "$comment": "The only delivery type Google offers for Calendar. A literal, so it cannot be misspelled per call."
+    }
+  },
+
+  "config": [
+    {
+      "type": "text",
+      "key": "calendarId",
+      "label": "Calendar ID",
+      "required": true,
+      "default": "primary",
+      "description": "`primary` for the connected account's own calendar, or a calendar's id.",
+      "send": { "in": "path", "as": "calendarId", "value": "string" }
+    },
+    {
+      "type": "text",
+      "key": "channelId",
+      "label": "Channel ID",
+      "required": true,
+      "description": "A UUID the host mints for THIS channel. Google requires it to be unique; it comes back in every notification as X-Goog-Channel-ID and is what channel_stop needs.",
+      "send": { "as": "id", "value": "string" }
+    },
+    {
+      "type": "text",
+      "key": "address",
+      "label": "Notification URL",
+      "required": true,
+      "description": "The HTTPS URL the host mounts for this trigger. Google POSTs notifications here with an EMPTY body and the facts in X-Goog-* headers.",
+      "send": { "as": "address", "value": "string" }
+    },
+    {
+      "type": "text",
+      "key": "token",
+      "label": "Channel token",
+      "required": true,
+      "description": "The connection's channelToken. The host fills this from the connection -- never type a value here. Google echoes it in X-Goog-Channel-Token, and that echo is how a delivery is verified.",
+      "send": { "as": "token", "value": "string" },
+      "$comment": "A CREDENTIAL sent in the body, which no earlier provider needed and the vocabulary has no word for yet -- authorize places the primary credential and `also` adds headers, and nothing writes a credential into a JSON body. Graph's clientState is the same shape, so the two-provider bar for `request.fromCredentials` is met; until it exists the host passes the value as config. Recorded in .ai/plans/vocabulary-deferred.md."
+    },
+    {
+      "type": "text",
+      "key": "ttlSeconds",
+      "label": "Lifetime (seconds)",
+      "required": true,
+      "default": "604800",
+      "description": "How long Google keeps the channel alive. Google's default is 604800 (one week), and the discovery document types it as a STRING inside `params`.",
+      "send": { "as": "params.ttl", "value": "string" },
+      "$comment": "A string, not a number: `params` is a map<string,string> in the discovery document, and a JSON number there is refused. Nested `as`, because it lives under params."
+    }
+  ],
+
+  "outputShape": [
+    { "path": "data.id", "type": "string", "description": "The channel id -- what was sent." },
+    { "path": "data.resourceId", "type": "string", "description": "Google's opaque id for the watched resource. channel_stop needs it together with the channel id." },
+    { "path": "data.resourceUri", "type": "string", "description": "The watched resource's URI." },
+    { "path": "data.token", "type": "string", "description": "The token that will be echoed on every notification." },
+    { "path": "data.expiration", "type": "string", "description": "When the channel expires, as epoch MILLISECONDS in a string. The subscription trigger's lease is built from this." },
+    { "path": "mode", "type": "string", "description": "Which estate this ran against. Google has no sandbox, so: fake or live." }
+  ],
+
+  "contract": {
+    "sends": ["calendarId", "id", "type", "address", "token", "params"],
+    "reads": ["id", "resourceId", "resourceUri", "token", "expiration"]
+  }
+}
