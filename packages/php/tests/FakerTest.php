@@ -30,6 +30,12 @@ it('channel_stop fakes the shape Google Calendar publishes', function () {
 
     $faked = GoogleCalendarFaker::respond('channel_stop', ['config' => $config, 'fake' => $fake]);
 
+    // Through JSON and back, because a faked EMPTY object is a stdClass — the only
+    // PHP value that spells `{}` on the wire — and `toBe` compares objects by
+    // identity. This asserts the VALUES; the `{}`-versus-`[]` spelling is what
+    // weaver's cross-runtime parity suite asserts, byte for byte.
+    $faked = json_decode((string) json_encode($faked), true, 512, JSON_THROW_ON_ERROR);
+
     expect($faked)->toBe([]);
 });
 
@@ -38,6 +44,12 @@ it('channel_watch fakes the shape Google Calendar publishes', function () {
     $fake = new FakeValues(FakeValues::seedForCall('google_calendar', 'channel_watch', $config));
 
     $faked = GoogleCalendarFaker::respond('channel_watch', ['config' => $config, 'fake' => $fake]);
+
+    // Through JSON and back, because a faked EMPTY object is a stdClass — the only
+    // PHP value that spells `{}` on the wire — and `toBe` compares objects by
+    // identity. This asserts the VALUES; the `{}`-versus-`[]` spelling is what
+    // weaver's cross-runtime parity suite asserts, byte for byte.
+    $faked = json_decode((string) json_encode($faked), true, 512, JSON_THROW_ON_ERROR);
 
     expect($faked)->toBe([
         'kind' => 'api#channel',
@@ -54,6 +66,12 @@ it('event_get fakes the shape Google Calendar publishes', function () {
     $fake = new FakeValues(FakeValues::seedForCall('google_calendar', 'event_get', $config));
 
     $faked = GoogleCalendarFaker::respond('event_get', ['config' => $config, 'fake' => $fake]);
+
+    // Through JSON and back, because a faked EMPTY object is a stdClass — the only
+    // PHP value that spells `{}` on the wire — and `toBe` compares objects by
+    // identity. This asserts the VALUES; the `{}`-versus-`[]` spelling is what
+    // weaver's cross-runtime parity suite asserts, byte for byte.
+    $faked = json_decode((string) json_encode($faked), true, 512, JSON_THROW_ON_ERROR);
 
     expect($faked)->toBe([
         'kind' => 'calendar#event',
@@ -104,6 +122,12 @@ it('event_list fakes the shape Google Calendar publishes', function () {
     $fake = new FakeValues(FakeValues::seedForCall('google_calendar', 'event_list', $config));
 
     $faked = GoogleCalendarFaker::respond('event_list', ['config' => $config, 'fake' => $fake]);
+
+    // Through JSON and back, because a faked EMPTY object is a stdClass — the only
+    // PHP value that spells `{}` on the wire — and `toBe` compares objects by
+    // identity. This asserts the VALUES; the `{}`-versus-`[]` spelling is what
+    // weaver's cross-runtime parity suite asserts, byte for byte.
+    $faked = json_decode((string) json_encode($faked), true, 512, JSON_THROW_ON_ERROR);
 
     expect($faked)->toBe([
         'kind' => 'calendar#events',
@@ -161,6 +185,12 @@ it('events_changed fakes the shape Google Calendar publishes', function () {
     $fake = new FakeValues(FakeValues::seedForCall('google_calendar', 'events_changed', $config));
 
     $faked = GoogleCalendarFaker::respond('events_changed', ['config' => $config, 'fake' => $fake]);
+
+    // Through JSON and back, because a faked EMPTY object is a stdClass — the only
+    // PHP value that spells `{}` on the wire — and `toBe` compares objects by
+    // identity. This asserts the VALUES; the `{}`-versus-`[]` spelling is what
+    // weaver's cross-runtime parity suite asserts, byte for byte.
+    $faked = json_decode((string) json_encode($faked), true, 512, JSON_THROW_ON_ERROR);
 
     expect($faked)->toBe([
         'channelId' => 'bffaab9c-bba2-8827-98d5-9f56e6c2325e',
