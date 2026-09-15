@@ -60,7 +60,7 @@
     "packages/py/pyproject.toml": "7d93e07163b09348c32b6ec09137bbc5815b22c34c94414d2763295bd01aacde",
     "packages/py/src/fancy_google_calendar/__init__.py": "4bcdb5174e28483d6be43ab5904b2bbe9792816d113e576741a21ad0bbcd1e6d",
     "packages/py/src/fancy_google_calendar/_fake.py": "5c67e1acf8d100c3cc532d6649bf7923b4f1b61e2f47627a68e5660d49fbbd1b",
-    "packages/py/src/fancy_google_calendar/_runtime.py": "211fb49b9a6c20909ec3700ea0bf4003c0f3755ffed6cc163af273bb07ee8d3c",
+    "packages/py/src/fancy_google_calendar/_runtime.py": "5d2e974fc6c8e81364f3dbaf6ed1e1f5e19c132584a223916d8387bb82a3c91f",
     "packages/py/src/fancy_google_calendar/actions/__init__.py": "eb6e042057c4f01d406c3f8fa84e2824ca92e9fba8cc1e9d2d45b485997edbcc",
     "packages/py/src/fancy_google_calendar/actions/channel_stop.py": "490fa248bb8ec5039f508f567fcfdcdd84748a57bce14b2bc606b5a189429a18",
     "packages/py/src/fancy_google_calendar/actions/channel_watch.py": "681c61bacca8d0239bba114a71dab394ce77863fd20a3e484bf0a7e0fd757bb5",
