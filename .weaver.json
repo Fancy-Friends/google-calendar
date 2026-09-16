@@ -66,7 +66,7 @@
     "packages/py/src/fancy_google_calendar/actions/channel_watch.py": "681c61bacca8d0239bba114a71dab394ce77863fd20a3e484bf0a7e0fd757bb5",
     "packages/py/src/fancy_google_calendar/actions/event_get.py": "e5f3ddfeb28f0a48709b8d8d7282d02ddf46fbaa8245563920a11863cd2b2a99",
     "packages/py/src/fancy_google_calendar/actions/event_list.py": "b377fc5216ee546b33acddc5f695d38d0f223a84f5b578c6c88fd6ec0ab3a971",
-    "packages/py/src/fancy_google_calendar/faker.py": "a2b77d387ce7d2f74fbf7da2d7f41be19b884a8b24ab7e9d8580a332ef1bce4d",
+    "packages/py/src/fancy_google_calendar/faker.py": "9f574a124b0292b2e2dc364a719b9257cdc34fd4ef44da148e8c5364b018d581",
     "packages/py/src/fancy_google_calendar/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "packages/py/src/fancy_google_calendar/service.py": "2fd2d4c3b3c36627d354b538c74cab92085fb5792b9f21bd5304b739e7bd8891",
     "packages/py/src/fancy_google_calendar/triggers/__init__.py": "7420081e5e3733ef10f43b5ae4870c8e46683e1e2e8aa1fac15e03db3cb25731",
