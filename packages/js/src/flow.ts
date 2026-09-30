@@ -31,15 +31,21 @@ import { GOOGLE_CALENDAR } from "./service.js";
 import {
   googleCalendarChannelStopKind,
   googleCalendarChannelWatchKind,
+  googleCalendarEventCreateKind,
+  googleCalendarEventDeleteKind,
   googleCalendarEventGetKind,
   googleCalendarEventListKind,
+  googleCalendarEventUpdateKind,
   googleCalendarEventsChangedTriggerKind,
 } from "@particle-academy/google-calendar-ui";
 
 import { googleCalendarChannelStop } from "./actions/channel-stop.js";
 import { googleCalendarChannelWatch } from "./actions/channel-watch.js";
+import { googleCalendarEventCreate } from "./actions/event-create.js";
+import { googleCalendarEventDelete } from "./actions/event-delete.js";
 import { googleCalendarEventGet } from "./actions/event-get.js";
 import { googleCalendarEventList } from "./actions/event-list.js";
+import { googleCalendarEventUpdate } from "./actions/event-update.js";
 import { GOOGLE_CALENDAR_EVENTS_CHANGED } from "./triggers/events-changed.js";
 
 export const googleCalendarChannelStopExecutor: NodeExecutor = async (ctx) => {
@@ -73,6 +79,42 @@ export const googleCalendarChannelWatchExecutor: NodeExecutor = async (ctx) => {
     level: "info",
     nodeId: ctx.node.id,
     message: `google_calendar channel_watch ${(result.data as { id?: string })?.id} (${result.mode})`,
+  });
+
+  return { __port: "out", value: result };
+};
+
+export const googleCalendarEventCreateExecutor: NodeExecutor = async (ctx) => {
+  const config = ((ctx.node.data as { config?: Record<string, unknown> })?.config ?? {});
+
+  const result = await googleCalendarEventCreate({
+    config,
+    input: ctx.inputs?.in,
+  });
+
+  ctx.emit({
+    type: "log",
+    level: "info",
+    nodeId: ctx.node.id,
+    message: `google_calendar event_create ${(result.data as { id?: string })?.id} (${result.mode})`,
+  });
+
+  return { __port: "out", value: result };
+};
+
+export const googleCalendarEventDeleteExecutor: NodeExecutor = async (ctx) => {
+  const config = ((ctx.node.data as { config?: Record<string, unknown> })?.config ?? {});
+
+  const result = await googleCalendarEventDelete({
+    config,
+    input: ctx.inputs?.in,
+  });
+
+  ctx.emit({
+    type: "log",
+    level: "info",
+    nodeId: ctx.node.id,
+    message: `google_calendar event_delete ${(result.data as { id?: string })?.id} (${result.mode})`,
   });
 
   return { __port: "out", value: result };
@@ -114,6 +156,24 @@ export const googleCalendarEventListExecutor: NodeExecutor = async (ctx) => {
   return { __port: "out", value: result };
 };
 
+export const googleCalendarEventUpdateExecutor: NodeExecutor = async (ctx) => {
+  const config = ((ctx.node.data as { config?: Record<string, unknown> })?.config ?? {});
+
+  const result = await googleCalendarEventUpdate({
+    config,
+    input: ctx.inputs?.in,
+  });
+
+  ctx.emit({
+    type: "log",
+    level: "info",
+    nodeId: ctx.node.id,
+    message: `google_calendar event_update ${(result.data as { id?: string })?.id} (${result.mode})`,
+  });
+
+  return { __port: "out", value: result };
+};
+
 export const googleCalendarEventsChangedTriggerExecutor: NodeExecutor = async (ctx) => {
   const config = ((ctx.node.data as { config?: Record<string, unknown> })?.config ?? {});
   const connection = resolveConnection({
@@ -135,7 +195,10 @@ export const googleCalendarEventsChangedTriggerExecutor: NodeExecutor = async (c
 export const GOOGLE_CALENDAR_RUNNABLE_KINDS: NodeKindDefinition[] = [
   { ...googleCalendarChannelStopKind, executor: googleCalendarChannelStopExecutor },
   { ...googleCalendarChannelWatchKind, executor: googleCalendarChannelWatchExecutor },
+  { ...googleCalendarEventCreateKind, executor: googleCalendarEventCreateExecutor },
+  { ...googleCalendarEventDeleteKind, executor: googleCalendarEventDeleteExecutor },
   { ...googleCalendarEventGetKind, executor: googleCalendarEventGetExecutor },
   { ...googleCalendarEventListKind, executor: googleCalendarEventListExecutor },
+  { ...googleCalendarEventUpdateKind, executor: googleCalendarEventUpdateExecutor },
   { ...googleCalendarEventsChangedTriggerKind, executor: googleCalendarEventsChangedTriggerExecutor },
 ];

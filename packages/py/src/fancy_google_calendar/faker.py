@@ -62,6 +62,73 @@ def _channel_watch(config: dict[str, Any], fake: FakeValues) -> Any:
     }
 
 
+def _event_create(config: dict[str, Any], fake: FakeValues) -> Any:
+    return {
+        "kind": "calendar#event",
+        "etag": "\"3456789012345679\"",
+        "id": fake.id("evt"),
+        "status": (
+            str(_v)
+            if (_v := config.get("status")) is not None and _v != ""
+            else "confirmed"
+        ),
+        "htmlLink": "https://www.google.com/calendar/event?eid=ZmFrZQ",
+        "created": "2026-09-30T09:00:00.000Z",
+        "updated": "2026-09-30T09:00:00.000Z",
+        "summary": (
+            str(_v)
+            if (_v := config.get("summary")) is not None and _v != ""
+            else "Design review"
+        ),
+        "description": (
+            str(_v)
+            if (_v := config.get("description")) is not None and _v != ""
+            else ""
+        ),
+        "location": (str(_v) if (_v := config.get("location")) is not None and _v != "" else ""),
+        "creator": {
+            "email": "ada@example.test",
+        },
+        "organizer": {
+            "email": "ada@example.test",
+        },
+        "start": {
+            "dateTime": (
+                str(_v)
+                if (_v := config.get("startDateTime")) is not None and _v != ""
+                else "2026-10-01T14:00:00Z"
+            ),
+            "timeZone": (
+                str(_v)
+                if (_v := config.get("startTimeZone")) is not None and _v != ""
+                else "UTC"
+            ),
+        },
+        "end": {
+            "dateTime": (
+                str(_v)
+                if (_v := config.get("endDateTime")) is not None and _v != ""
+                else "2026-10-01T15:00:00Z"
+            ),
+            "timeZone": (
+                str(_v)
+                if (_v := config.get("endTimeZone")) is not None and _v != ""
+                else "UTC"
+            ),
+        },
+        "iCalUID": "-".join([fake.hex(8), fake.hex(4), fake.hex(4), fake.hex(4), fake.hex(12)]),
+        "sequence": 0,
+        "reminders": {
+            "useDefault": True,
+        },
+        "eventType": "default",
+    }
+
+
+def _event_delete(config: dict[str, Any], fake: FakeValues) -> Any:
+    return {}
+
+
 def _event_get(config: dict[str, Any], fake: FakeValues) -> Any:
     bound_eventid = (
         str(_v)
@@ -165,6 +232,73 @@ def _event_list(config: dict[str, Any], fake: FakeValues) -> Any:
     }
 
 
+def _event_update(config: dict[str, Any], fake: FakeValues) -> Any:
+    return {
+        "kind": "calendar#event",
+        "etag": "\"3456789012345680\"",
+        "id": (
+            str(_v)
+            if (_v := config.get("eventId")) is not None and _v != ""
+            else fake.id("evt")
+        ),
+        "status": (
+            str(_v)
+            if (_v := config.get("status")) is not None and _v != ""
+            else "confirmed"
+        ),
+        "htmlLink": "https://www.google.com/calendar/event?eid=ZmFrZQ",
+        "created": "2026-09-01T09:00:00.000Z",
+        "updated": "2026-09-30T09:15:00.000Z",
+        "summary": (
+            str(_v)
+            if (_v := config.get("summary")) is not None and _v != ""
+            else "Design review"
+        ),
+        "description": (
+            str(_v)
+            if (_v := config.get("description")) is not None and _v != ""
+            else ""
+        ),
+        "location": (str(_v) if (_v := config.get("location")) is not None and _v != "" else ""),
+        "creator": {
+            "email": "ada@example.test",
+        },
+        "organizer": {
+            "email": "ada@example.test",
+        },
+        "start": {
+            "dateTime": (
+                str(_v)
+                if (_v := config.get("startDateTime")) is not None and _v != ""
+                else "2026-10-01T14:00:00Z"
+            ),
+            "timeZone": (
+                str(_v)
+                if (_v := config.get("startTimeZone")) is not None and _v != ""
+                else "UTC"
+            ),
+        },
+        "end": {
+            "dateTime": (
+                str(_v)
+                if (_v := config.get("endDateTime")) is not None and _v != ""
+                else "2026-10-01T15:00:00Z"
+            ),
+            "timeZone": (
+                str(_v)
+                if (_v := config.get("endTimeZone")) is not None and _v != ""
+                else "UTC"
+            ),
+        },
+        "iCalUID": "-".join([fake.hex(8), fake.hex(4), fake.hex(4), fake.hex(4), fake.hex(12)]),
+        "sequence": 1,
+        "reminders": {
+            "useDefault": True,
+        },
+        "eventType": "default",
+    }
+
+
 def _events_changed(config: dict[str, Any], fake: FakeValues) -> Any:
     bound_channelid = "-".join(
         [fake.hex(8), fake.hex(4), fake.hex(4), fake.hex(4), fake.hex(12)]
@@ -195,11 +329,20 @@ def respond(operation: str, request: dict[str, Any]) -> Any:
     if operation == "channel_watch":
         return _channel_watch(config, fake)
 
+    if operation == "event_create":
+        return _event_create(config, fake)
+
+    if operation == "event_delete":
+        return _event_delete(config, fake)
+
     if operation == "event_get":
         return _event_get(config, fake)
 
     if operation == "event_list":
         return _event_list(config, fake)
+
+    if operation == "event_update":
+        return _event_update(config, fake)
 
     if operation == "events_changed":
         return _events_changed(config, fake)

@@ -93,6 +93,38 @@ Open a push-notification channel on a calendar's events. The host's subscription
 | `token` | yes | The connection's channelToken. The host fills this from the connection -- never type a value here. Google echoes it in X-Goog-Channel-Token, and that echo is how a delivery is verified. |
 | `ttlSeconds` | yes | How long Google keeps the channel alive. Google's default is 604800 (one week), and the discovery document types it as a STRING inside `params`. |
 
+#### `event_create` — Create Google Calendar event
+
+Create a timed event on a Google Calendar.
+
+`POST /calendar/v3/calendars/{calendarId}/events` · **unsafe to replay** — a retried durable run does it TWICE
+
+| Input | Required | What it is |
+|---|---|---|
+| `calendarId` | yes | `primary` for the connected account's own calendar, or a calendar's id. |
+| `summary` | yes | Title |
+| `description` | no | Can contain HTML. |
+| `location` | no | Free-form text. |
+| `startDateTime` | yes | RFC 3339, e.g. 2026-10-01T14:00:00Z. Include an offset, or pair with a time zone below. |
+| `startTimeZone` | no | IANA name, e.g. America/New_York. Optional when the start time already carries an offset. |
+| `endDateTime` | yes | RFC 3339. Exclusive -- the event ends at, not through, this instant. |
+| `endTimeZone` | no | End time zone |
+| `status` | no | "cancelled" is not offered here -- that is event_delete's job, not a status this action should be able to set on create. |
+| `visibility` | no | Visibility |
+| `transparency` | no | opaque blocks time on the calendar (Busy); transparent does not (Available). |
+| `colorId` | no | An id from the colors endpoint's event section. Leave blank for the calendar's default. |
+
+#### `event_delete` — Delete Google Calendar event
+
+Remove an event from a Google Calendar.
+
+`DELETE /calendar/v3/calendars/{calendarId}/events/{eventId}` · idempotent — safe to replay
+
+| Input | Required | What it is |
+|---|---|---|
+| `calendarId` | yes | Calendar ID |
+| `eventId` | yes | From event_create's data.id, or event_list/event_get. |
+
 #### `event_get` — Google Calendar event
 
 Read one event from a Google Calendar.
@@ -119,6 +151,28 @@ List events from a Google Calendar, in full or incrementally with a sync token.
 | `maxResults` | no | Events per page. Google's default is 250 and its maximum 2500; a nextPageToken means there are more. |
 | `pageToken` | no | From a previous page's nextPageToken. |
 | `singleEvents` | no | Return each occurrence of a recurring event as its own item, rather than the series once. |
+
+#### `event_update` — Update Google Calendar event
+
+Change one or more fields of an existing event. Only the fields provided are touched.
+
+`PATCH /calendar/v3/calendars/{calendarId}/events/{eventId}` · idempotent — safe to replay
+
+| Input | Required | What it is |
+|---|---|---|
+| `calendarId` | yes | Calendar ID |
+| `eventId` | yes | From event_create's data.id, or event_list/event_get. |
+| `summary` | no | Title |
+| `description` | no | Description |
+| `location` | no | Location |
+| `startDateTime` | no | RFC 3339. Leave blank to leave the start time unchanged. |
+| `startTimeZone` | no | Start time zone |
+| `endDateTime` | no | RFC 3339. Leave blank to leave the end time unchanged. |
+| `endTimeZone` | no | End time zone |
+| `status` | no | Setting cancelled here has the same effect as event_delete -- offered because PATCH is also Google's documented way to cancel one instance of a recurring event, which event_delete (which removes the whole resource) cannot target. |
+| `visibility` | no | Visibility |
+| `transparency` | no | Show me as |
+| `colorId` | no | Color ID |
 
 ### Triggers
 

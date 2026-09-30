@@ -41,8 +41,11 @@ final class GoogleCalendarFlow
     public const EXECUTORS = [
         ChannelStopExecutor::class,
         ChannelWatchExecutor::class,
+        EventCreateExecutor::class,
+        EventDeleteExecutor::class,
         EventGetExecutor::class,
         EventListExecutor::class,
+        EventUpdateExecutor::class,
         EventsChangedTriggerExecutor::class,
     ];
 

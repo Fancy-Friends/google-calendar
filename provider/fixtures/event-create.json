@@ -1,0 +1,31 @@
+{
+  "$comment": "A newly created event, echoing back what was sent -- Google's own insert response does exactly this.",
+  "operation": "event_create",
+
+  "response": {
+    "kind": "calendar#event",
+    "etag": "\"3456789012345679\"",
+    "id": { "$fake": "id", "prefix": "evt" },
+    "status": { "$config": "status", "as": "string", "default": "confirmed" },
+    "htmlLink": "https://www.google.com/calendar/event?eid=ZmFrZQ",
+    "created": "2026-09-30T09:00:00.000Z",
+    "updated": "2026-09-30T09:00:00.000Z",
+    "summary": { "$config": "summary", "as": "string", "fallback": "Design review" },
+    "description": { "$config": "description", "as": "string", "default": "" },
+    "location": { "$config": "location", "as": "string", "default": "" },
+    "creator": { "email": "ada@example.test" },
+    "organizer": { "email": "ada@example.test" },
+    "start": {
+      "dateTime": { "$config": "startDateTime", "as": "string", "fallback": "2026-10-01T14:00:00Z" },
+      "timeZone": { "$config": "startTimeZone", "as": "string", "default": "UTC" }
+    },
+    "end": {
+      "dateTime": { "$config": "endDateTime", "as": "string", "fallback": "2026-10-01T15:00:00Z" },
+      "timeZone": { "$config": "endTimeZone", "as": "string", "default": "UTC" }
+    },
+    "iCalUID": { "$fake": "uuid" },
+    "sequence": 0,
+    "reminders": { "useDefault": true },
+    "eventType": "default"
+  }
+}

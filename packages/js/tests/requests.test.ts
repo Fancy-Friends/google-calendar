@@ -23,8 +23,11 @@ import type { PreparedRequest } from "@particle-academy/fancy-connector-core";
 
 import { googleCalendarChannelStop } from "../src/actions/channel-stop.js";
 import { googleCalendarChannelWatch } from "../src/actions/channel-watch.js";
+import { googleCalendarEventCreate } from "../src/actions/event-create.js";
+import { googleCalendarEventDelete } from "../src/actions/event-delete.js";
 import { googleCalendarEventGet } from "../src/actions/event-get.js";
 import { googleCalendarEventList } from "../src/actions/event-list.js";
+import { googleCalendarEventUpdate } from "../src/actions/event-update.js";
 
 /** Capture the prepared request instead of sending it. */
 function capture() {
@@ -102,6 +105,75 @@ test("channel_watch sends POST /calendar/v3/calendars/{calendarId}/events/watch"
   });
 });
 
+test("event_create sends POST /calendar/v3/calendars/{calendarId}/events", async () => {
+  const { seen, transport } = capture();
+
+  await googleCalendarEventCreate({
+    config: {
+      "calendarId": "example-calendarId",
+      "summary": "example-summary",
+      "description": "example-description",
+      "location": "example-location",
+      "startDateTime": "example-startDateTime",
+      "startTimeZone": "example-startTimeZone",
+      "endDateTime": "example-endDateTime",
+      "endTimeZone": "example-endTimeZone",
+      "status": "confirmed",
+      "visibility": "default",
+      "transparency": "opaque",
+      "colorId": "example-colorId"
+    },
+    credentials: CREDENTIALS,
+    mode: "live",
+    transport,
+  });
+
+  assert.equal(seen.length, 1);
+  assert.equal(seen[0]!.method, "POST");
+  assert.ok(new URL(seen[0]!.url).pathname.endsWith("/calendar/v3/calendars/example-calendarId/events"), seen[0]!.url);
+
+  assert.deepEqual(JSON.parse(String(seen[0]!.body ?? "{}")), {
+    "summary": "example-summary",
+    "description": "example-description",
+    "location": "example-location",
+    "start": {
+      "dateTime": "example-startDateTime",
+      "timeZone": "example-startTimeZone"
+    },
+    "end": {
+      "dateTime": "example-endDateTime",
+      "timeZone": "example-endTimeZone"
+    },
+    "status": "confirmed",
+    "visibility": "default",
+    "transparency": "opaque",
+    "colorId": "example-colorId"
+  });
+});
+
+test("event_delete sends DELETE /calendar/v3/calendars/{calendarId}/events/{eventId}", async () => {
+  const { seen, transport } = capture();
+
+  await googleCalendarEventDelete({
+    config: {
+      "calendarId": "example-calendarId",
+      "eventId": "example-eventId"
+    },
+    credentials: CREDENTIALS,
+    mode: "live",
+    transport,
+  });
+
+  assert.equal(seen.length, 1);
+  assert.equal(seen[0]!.method, "DELETE");
+  assert.ok(new URL(seen[0]!.url).pathname.endsWith("/calendar/v3/calendars/example-calendarId/events/example-eventId"), seen[0]!.url);
+
+  assert.deepEqual(
+    Object.fromEntries(new URL(seen[0]!.url).searchParams),
+    {},
+  );
+});
+
 test("event_get sends GET /calendar/v3/calendars/{calendarId}/events/{eventId}", async () => {
   const { seen, transport } = capture();
 
@@ -158,6 +230,53 @@ test("event_list sends GET /calendar/v3/calendars/{calendarId}/events", async ()
       "singleEvents": "true"
     },
   );
+});
+
+test("event_update sends PATCH /calendar/v3/calendars/{calendarId}/events/{eventId}", async () => {
+  const { seen, transport } = capture();
+
+  await googleCalendarEventUpdate({
+    config: {
+      "calendarId": "example-calendarId",
+      "eventId": "example-eventId",
+      "summary": "example-summary",
+      "description": "example-description",
+      "location": "example-location",
+      "startDateTime": "example-startDateTime",
+      "startTimeZone": "example-startTimeZone",
+      "endDateTime": "example-endDateTime",
+      "endTimeZone": "example-endTimeZone",
+      "status": "confirmed",
+      "visibility": "default",
+      "transparency": "opaque",
+      "colorId": "example-colorId"
+    },
+    credentials: CREDENTIALS,
+    mode: "live",
+    transport,
+  });
+
+  assert.equal(seen.length, 1);
+  assert.equal(seen[0]!.method, "PATCH");
+  assert.ok(new URL(seen[0]!.url).pathname.endsWith("/calendar/v3/calendars/example-calendarId/events/example-eventId"), seen[0]!.url);
+
+  assert.deepEqual(JSON.parse(String(seen[0]!.body ?? "{}")), {
+    "summary": "example-summary",
+    "description": "example-description",
+    "location": "example-location",
+    "start": {
+      "dateTime": "example-startDateTime",
+      "timeZone": "example-startTimeZone"
+    },
+    "end": {
+      "dateTime": "example-endDateTime",
+      "timeZone": "example-endTimeZone"
+    },
+    "status": "confirmed",
+    "visibility": "default",
+    "transparency": "opaque",
+    "colorId": "example-colorId"
+  });
 });
 
 test("the credential is placed the way the provider wants it", async () => {

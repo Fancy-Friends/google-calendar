@@ -46,6 +46,55 @@ def test_channel_watch_fakes_the_published_shape() -> None:
     }
 
 
+def test_event_create_fakes_the_published_shape() -> None:
+    config = {}
+    fake = FakeValues(seed_for_call("google_calendar", "event_create", config))
+
+    faked = respond("event_create", {"config": config, "fake": fake})
+
+    assert faked == {
+        "kind": "calendar#event",
+        "etag": "\"3456789012345679\"",
+        "id": "evt_fake_d3810ed9b910",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=ZmFrZQ",
+        "created": "2026-09-30T09:00:00.000Z",
+        "updated": "2026-09-30T09:00:00.000Z",
+        "summary": "Design review",
+        "description": "",
+        "location": "",
+        "creator": {
+            "email": "ada@example.test",
+        },
+        "organizer": {
+            "email": "ada@example.test",
+        },
+        "start": {
+            "dateTime": "2026-10-01T14:00:00Z",
+            "timeZone": "UTC",
+        },
+        "end": {
+            "dateTime": "2026-10-01T15:00:00Z",
+            "timeZone": "UTC",
+        },
+        "iCalUID": "2bf1920b-2faf-ac1d-9c18-c5d79473dc64",
+        "sequence": 0,
+        "reminders": {
+            "useDefault": True,
+        },
+        "eventType": "default",
+    }
+
+
+def test_event_delete_fakes_the_published_shape() -> None:
+    config = {}
+    fake = FakeValues(seed_for_call("google_calendar", "event_delete", config))
+
+    faked = respond("event_delete", {"config": config, "fake": fake})
+
+    assert faked == {}
+
+
 def test_event_get_fakes_the_published_shape() -> None:
     config = {}
     fake = FakeValues(seed_for_call("google_calendar", "event_get", config))
@@ -148,6 +197,46 @@ def test_event_list_fakes_the_published_shape() -> None:
                 "eventType": "default",
             },
         ],
+    }
+
+
+def test_event_update_fakes_the_published_shape() -> None:
+    config = {}
+    fake = FakeValues(seed_for_call("google_calendar", "event_update", config))
+
+    faked = respond("event_update", {"config": config, "fake": fake})
+
+    assert faked == {
+        "kind": "calendar#event",
+        "etag": "\"3456789012345680\"",
+        "id": "evt_fake_e5bd43aff4d8",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=ZmFrZQ",
+        "created": "2026-09-01T09:00:00.000Z",
+        "updated": "2026-09-30T09:15:00.000Z",
+        "summary": "Design review",
+        "description": "",
+        "location": "",
+        "creator": {
+            "email": "ada@example.test",
+        },
+        "organizer": {
+            "email": "ada@example.test",
+        },
+        "start": {
+            "dateTime": "2026-10-01T14:00:00Z",
+            "timeZone": "UTC",
+        },
+        "end": {
+            "dateTime": "2026-10-01T15:00:00Z",
+            "timeZone": "UTC",
+        },
+        "iCalUID": "dafba425-6195-345c-b729-85a6ffdc11f7",
+        "sequence": 1,
+        "reminders": {
+            "useDefault": True,
+        },
+        "eventType": "default",
     }
 
 

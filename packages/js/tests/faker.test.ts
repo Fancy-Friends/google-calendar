@@ -48,6 +48,53 @@ test("channel_watch fakes the shape Google Calendar publishes", () => {
   });
 });
 
+test("event_create fakes the shape Google Calendar publishes", () => {
+  const config = {};
+
+  const faked = googleCalendarFaker("event_create", fakeRequest("google_calendar", "event_create", config));
+
+  assert.deepEqual(faked, {
+    "kind": "calendar#event",
+    "etag": "\"3456789012345679\"",
+    "id": "evt_fake_d3810ed9b910",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event?eid=ZmFrZQ",
+    "created": "2026-09-30T09:00:00.000Z",
+    "updated": "2026-09-30T09:00:00.000Z",
+    "summary": "Design review",
+    "description": "",
+    "location": "",
+    "creator": {
+      "email": "ada@example.test"
+    },
+    "organizer": {
+      "email": "ada@example.test"
+    },
+    "start": {
+      "dateTime": "2026-10-01T14:00:00Z",
+      "timeZone": "UTC"
+    },
+    "end": {
+      "dateTime": "2026-10-01T15:00:00Z",
+      "timeZone": "UTC"
+    },
+    "iCalUID": "2bf1920b-2faf-ac1d-9c18-c5d79473dc64",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  });
+});
+
+test("event_delete fakes the shape Google Calendar publishes", () => {
+  const config = {};
+
+  const faked = googleCalendarFaker("event_delete", fakeRequest("google_calendar", "event_delete", config));
+
+  assert.deepEqual(faked, {});
+});
+
 test("event_get fakes the shape Google Calendar publishes", () => {
   const config = {};
 
@@ -148,6 +195,45 @@ test("event_list fakes the shape Google Calendar publishes", () => {
         "eventType": "default"
       }
     ]
+  });
+});
+
+test("event_update fakes the shape Google Calendar publishes", () => {
+  const config = {};
+
+  const faked = googleCalendarFaker("event_update", fakeRequest("google_calendar", "event_update", config));
+
+  assert.deepEqual(faked, {
+    "kind": "calendar#event",
+    "etag": "\"3456789012345680\"",
+    "id": "evt_fake_e5bd43aff4d8",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event?eid=ZmFrZQ",
+    "created": "2026-09-01T09:00:00.000Z",
+    "updated": "2026-09-30T09:15:00.000Z",
+    "summary": "Design review",
+    "description": "",
+    "location": "",
+    "creator": {
+      "email": "ada@example.test"
+    },
+    "organizer": {
+      "email": "ada@example.test"
+    },
+    "start": {
+      "dateTime": "2026-10-01T14:00:00Z",
+      "timeZone": "UTC"
+    },
+    "end": {
+      "dateTime": "2026-10-01T15:00:00Z",
+      "timeZone": "UTC"
+    },
+    "iCalUID": "dafba425-6195-345c-b729-85a6ffdc11f7",
+    "sequence": 1,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
   });
 });
 

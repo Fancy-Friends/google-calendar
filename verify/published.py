@@ -36,6 +36,47 @@ GOLDENS = [
         },
     },
     {
+        "operation": "event_create",
+        "config": {},
+        "expected": {
+            "kind": "calendar#event",
+            "etag": "\"3456789012345679\"",
+            "id": "evt_fake_d3810ed9b910",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=ZmFrZQ",
+            "created": "2026-09-30T09:00:00.000Z",
+            "updated": "2026-09-30T09:00:00.000Z",
+            "summary": "Design review",
+            "description": "",
+            "location": "",
+            "creator": {
+                "email": "ada@example.test",
+            },
+            "organizer": {
+                "email": "ada@example.test",
+            },
+            "start": {
+                "dateTime": "2026-10-01T14:00:00Z",
+                "timeZone": "UTC",
+            },
+            "end": {
+                "dateTime": "2026-10-01T15:00:00Z",
+                "timeZone": "UTC",
+            },
+            "iCalUID": "2bf1920b-2faf-ac1d-9c18-c5d79473dc64",
+            "sequence": 0,
+            "reminders": {
+                "useDefault": True,
+            },
+            "eventType": "default",
+        },
+    },
+    {
+        "operation": "event_delete",
+        "config": {},
+        "expected": {},
+    },
+    {
         "operation": "event_get",
         "config": {},
         "expected": {
@@ -130,6 +171,42 @@ GOLDENS = [
                     "eventType": "default",
                 },
             ],
+        },
+    },
+    {
+        "operation": "event_update",
+        "config": {},
+        "expected": {
+            "kind": "calendar#event",
+            "etag": "\"3456789012345680\"",
+            "id": "evt_fake_e5bd43aff4d8",
+            "status": "confirmed",
+            "htmlLink": "https://www.google.com/calendar/event?eid=ZmFrZQ",
+            "created": "2026-09-01T09:00:00.000Z",
+            "updated": "2026-09-30T09:15:00.000Z",
+            "summary": "Design review",
+            "description": "",
+            "location": "",
+            "creator": {
+                "email": "ada@example.test",
+            },
+            "organizer": {
+                "email": "ada@example.test",
+            },
+            "start": {
+                "dateTime": "2026-10-01T14:00:00Z",
+                "timeZone": "UTC",
+            },
+            "end": {
+                "dateTime": "2026-10-01T15:00:00Z",
+                "timeZone": "UTC",
+            },
+            "iCalUID": "dafba425-6195-345c-b729-85a6ffdc11f7",
+            "sequence": 1,
+            "reminders": {
+                "useDefault": True,
+            },
+            "eventType": "default",
         },
     },
     {

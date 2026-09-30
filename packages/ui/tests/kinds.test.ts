@@ -35,8 +35,11 @@ test("the registry names are exactly what the manifest says", () => {
   assert.deepEqual(GOOGLE_CALENDAR_KINDS.map((kind) => kind.name), [
     "@particle-academy/google_calendar_channel_stop",
     "@particle-academy/google_calendar_channel_watch",
+    "@particle-academy/google_calendar_event_create",
+    "@particle-academy/google_calendar_event_delete",
     "@particle-academy/google_calendar_event_get",
     "@particle-academy/google_calendar_event_list",
+    "@particle-academy/google_calendar_event_update",
     "@particle-academy/google_calendar_events_changed_trigger"
   ]);
 });

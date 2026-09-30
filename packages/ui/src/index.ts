@@ -20,22 +20,31 @@
 export * from "./service.js";
 export * from "./kinds/channel-stop.js";
 export * from "./kinds/channel-watch.js";
+export * from "./kinds/event-create.js";
+export * from "./kinds/event-delete.js";
 export * from "./kinds/event-get.js";
 export * from "./kinds/event-list.js";
+export * from "./kinds/event-update.js";
 export * from "./kinds/events-changed.js";
 
 import type { NodeKindDefinition } from "@particle-academy/fancy-flow/engine";
 import { googleCalendarChannelStopKind } from "./kinds/channel-stop.js";
 import { googleCalendarChannelWatchKind } from "./kinds/channel-watch.js";
+import { googleCalendarEventCreateKind } from "./kinds/event-create.js";
+import { googleCalendarEventDeleteKind } from "./kinds/event-delete.js";
 import { googleCalendarEventGetKind } from "./kinds/event-get.js";
 import { googleCalendarEventListKind } from "./kinds/event-list.js";
+import { googleCalendarEventUpdateKind } from "./kinds/event-update.js";
 import { googleCalendarEventsChangedTriggerKind } from "./kinds/events-changed.js";
 
 /** Every Google Calendar kind, for a host that registers the lot. */
 export const GOOGLE_CALENDAR_KINDS: NodeKindDefinition[] = [
   googleCalendarChannelStopKind,
   googleCalendarChannelWatchKind,
+  googleCalendarEventCreateKind,
+  googleCalendarEventDeleteKind,
   googleCalendarEventGetKind,
   googleCalendarEventListKind,
+  googleCalendarEventUpdateKind,
   googleCalendarEventsChangedTriggerKind,
 ];

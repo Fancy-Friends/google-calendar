@@ -37,8 +37,11 @@ final class GoogleCalendarFaker
         return match ($operation) {
             'channel_stop' => self::ChannelStop($config, $fake),
             'channel_watch' => self::ChannelWatch($config, $fake),
+            'event_create' => self::EventCreate($config, $fake),
+            'event_delete' => self::EventDelete($config, $fake),
             'event_get' => self::EventGet($config, $fake),
             'event_list' => self::EventList($config, $fake),
+            'event_update' => self::EventUpdate($config, $fake),
             'events_changed' => self::EventsChanged($config, $fake),
             default => throw new \InvalidArgumentException(
                 // A faker asked for an operation it has no shape for must SAY so.
@@ -71,6 +74,49 @@ final class GoogleCalendarFaker
         'token' => $boundToken,
         'expiration' => '1789430400000',
     ];
+    }
+
+    /** @param array<string,mixed> $config */
+    private static function EventCreate(array $config, mixed $fake): array|\stdClass
+    {
+        return [
+        'kind' => 'calendar#event',
+        'etag' => '"3456789012345679"',
+        'id' => $fake->id('evt'),
+        'status' => ((($v = $config['status'] ?? null) !== null && $v !== '') ? (string) $v : 'confirmed'),
+        'htmlLink' => 'https://www.google.com/calendar/event?eid=ZmFrZQ',
+        'created' => '2026-09-30T09:00:00.000Z',
+        'updated' => '2026-09-30T09:00:00.000Z',
+        'summary' => ((($v = $config['summary'] ?? null) !== null && $v !== '') ? (string) $v : 'Design review'),
+        'description' => ((($v = $config['description'] ?? null) !== null && $v !== '') ? (string) $v : ''),
+        'location' => ((($v = $config['location'] ?? null) !== null && $v !== '') ? (string) $v : ''),
+        'creator' => [
+            'email' => 'ada@example.test',
+        ],
+        'organizer' => [
+            'email' => 'ada@example.test',
+        ],
+        'start' => [
+            'dateTime' => ((($v = $config['startDateTime'] ?? null) !== null && $v !== '') ? (string) $v : '2026-10-01T14:00:00Z'),
+            'timeZone' => ((($v = $config['startTimeZone'] ?? null) !== null && $v !== '') ? (string) $v : 'UTC'),
+        ],
+        'end' => [
+            'dateTime' => ((($v = $config['endDateTime'] ?? null) !== null && $v !== '') ? (string) $v : '2026-10-01T15:00:00Z'),
+            'timeZone' => ((($v = $config['endTimeZone'] ?? null) !== null && $v !== '') ? (string) $v : 'UTC'),
+        ],
+        'iCalUID' => $fake->hex(8).'-'.$fake->hex(4).'-'.$fake->hex(4).'-'.$fake->hex(4).'-'.$fake->hex(12),
+        'sequence' => 0,
+        'reminders' => [
+            'useDefault' => true,
+        ],
+        'eventType' => 'default',
+    ];
+    }
+
+    /** @param array<string,mixed> $config */
+    private static function EventDelete(array $config, mixed $fake): array|\stdClass
+    {
+        return new \stdClass();
     }
 
     /** @param array<string,mixed> $config */
@@ -171,6 +217,43 @@ final class GoogleCalendarFaker
                 'eventType' => 'default',
             ],
         ],
+    ];
+    }
+
+    /** @param array<string,mixed> $config */
+    private static function EventUpdate(array $config, mixed $fake): array|\stdClass
+    {
+        return [
+        'kind' => 'calendar#event',
+        'etag' => '"3456789012345680"',
+        'id' => ((($v = $config['eventId'] ?? null) !== null && $v !== '') ? (string) $v : $fake->id('evt')),
+        'status' => ((($v = $config['status'] ?? null) !== null && $v !== '') ? (string) $v : 'confirmed'),
+        'htmlLink' => 'https://www.google.com/calendar/event?eid=ZmFrZQ',
+        'created' => '2026-09-01T09:00:00.000Z',
+        'updated' => '2026-09-30T09:15:00.000Z',
+        'summary' => ((($v = $config['summary'] ?? null) !== null && $v !== '') ? (string) $v : 'Design review'),
+        'description' => ((($v = $config['description'] ?? null) !== null && $v !== '') ? (string) $v : ''),
+        'location' => ((($v = $config['location'] ?? null) !== null && $v !== '') ? (string) $v : ''),
+        'creator' => [
+            'email' => 'ada@example.test',
+        ],
+        'organizer' => [
+            'email' => 'ada@example.test',
+        ],
+        'start' => [
+            'dateTime' => ((($v = $config['startDateTime'] ?? null) !== null && $v !== '') ? (string) $v : '2026-10-01T14:00:00Z'),
+            'timeZone' => ((($v = $config['startTimeZone'] ?? null) !== null && $v !== '') ? (string) $v : 'UTC'),
+        ],
+        'end' => [
+            'dateTime' => ((($v = $config['endDateTime'] ?? null) !== null && $v !== '') ? (string) $v : '2026-10-01T15:00:00Z'),
+            'timeZone' => ((($v = $config['endTimeZone'] ?? null) !== null && $v !== '') ? (string) $v : 'UTC'),
+        ],
+        'iCalUID' => $fake->hex(8).'-'.$fake->hex(4).'-'.$fake->hex(4).'-'.$fake->hex(4).'-'.$fake->hex(12),
+        'sequence' => 1,
+        'reminders' => [
+            'useDefault' => true,
+        ],
+        'eventType' => 'default',
     ];
     }
 

@@ -60,6 +60,47 @@ const GOLDENS = [
     }
   },
   {
+    "operation": "event_create",
+    "config": {},
+    "expected": {
+      "kind": "calendar#event",
+      "etag": "\"3456789012345679\"",
+      "id": "evt_fake_d3810ed9b910",
+      "status": "confirmed",
+      "htmlLink": "https://www.google.com/calendar/event?eid=ZmFrZQ",
+      "created": "2026-09-30T09:00:00.000Z",
+      "updated": "2026-09-30T09:00:00.000Z",
+      "summary": "Design review",
+      "description": "",
+      "location": "",
+      "creator": {
+        "email": "ada@example.test"
+      },
+      "organizer": {
+        "email": "ada@example.test"
+      },
+      "start": {
+        "dateTime": "2026-10-01T14:00:00Z",
+        "timeZone": "UTC"
+      },
+      "end": {
+        "dateTime": "2026-10-01T15:00:00Z",
+        "timeZone": "UTC"
+      },
+      "iCalUID": "2bf1920b-2faf-ac1d-9c18-c5d79473dc64",
+      "sequence": 0,
+      "reminders": {
+        "useDefault": true
+      },
+      "eventType": "default"
+    }
+  },
+  {
+    "operation": "event_delete",
+    "config": {},
+    "expected": {}
+  },
+  {
     "operation": "event_get",
     "config": {},
     "expected": {
@@ -157,6 +198,42 @@ const GOLDENS = [
     }
   },
   {
+    "operation": "event_update",
+    "config": {},
+    "expected": {
+      "kind": "calendar#event",
+      "etag": "\"3456789012345680\"",
+      "id": "evt_fake_e5bd43aff4d8",
+      "status": "confirmed",
+      "htmlLink": "https://www.google.com/calendar/event?eid=ZmFrZQ",
+      "created": "2026-09-01T09:00:00.000Z",
+      "updated": "2026-09-30T09:15:00.000Z",
+      "summary": "Design review",
+      "description": "",
+      "location": "",
+      "creator": {
+        "email": "ada@example.test"
+      },
+      "organizer": {
+        "email": "ada@example.test"
+      },
+      "start": {
+        "dateTime": "2026-10-01T14:00:00Z",
+        "timeZone": "UTC"
+      },
+      "end": {
+        "dateTime": "2026-10-01T15:00:00Z",
+        "timeZone": "UTC"
+      },
+      "iCalUID": "dafba425-6195-345c-b729-85a6ffdc11f7",
+      "sequence": 1,
+      "reminders": {
+        "useDefault": true
+      },
+      "eventType": "default"
+    }
+  },
+  {
     "operation": "events_changed",
     "config": {
       "sample": "exists"
@@ -185,7 +262,7 @@ for (const { operation, config, expected } of GOLDENS) {
 
 // The ui package is a separate tarball, and js depends on it by its
 // published name — so this also proves that dependency resolves.
-assert.equal(GOOGLE_CALENDAR_KINDS.length, 5);
+assert.equal(GOOGLE_CALENDAR_KINDS.length, 8);
 for (const kind of GOOGLE_CALENDAR_KINDS) {
   const keys = kind.configSchema.map((field) => field.key);
   assert.equal(keys[0], "connection");

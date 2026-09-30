@@ -42,6 +42,45 @@ function fakeChannelWatch({ config, fake }: FakeRequest): unknown {
   };
 }
 
+function fakeEventCreate({ config, fake }: FakeRequest): unknown {
+  return {
+    "kind": "calendar#event",
+    "etag": "\"3456789012345679\"",
+    "id": fake.id("evt"),
+    "status": (config.status !== undefined && config.status !== null && config.status !== "" ? String(config.status) : "confirmed"),
+    "htmlLink": "https://www.google.com/calendar/event?eid=ZmFrZQ",
+    "created": "2026-09-30T09:00:00.000Z",
+    "updated": "2026-09-30T09:00:00.000Z",
+    "summary": (config.summary !== undefined && config.summary !== null && config.summary !== "" ? String(config.summary) : "Design review"),
+    "description": (config.description !== undefined && config.description !== null && config.description !== "" ? String(config.description) : ""),
+    "location": (config.location !== undefined && config.location !== null && config.location !== "" ? String(config.location) : ""),
+    "creator": {
+      "email": "ada@example.test",
+    },
+    "organizer": {
+      "email": "ada@example.test",
+    },
+    "start": {
+      "dateTime": (config.startDateTime !== undefined && config.startDateTime !== null && config.startDateTime !== "" ? String(config.startDateTime) : "2026-10-01T14:00:00Z"),
+      "timeZone": (config.startTimeZone !== undefined && config.startTimeZone !== null && config.startTimeZone !== "" ? String(config.startTimeZone) : "UTC"),
+    },
+    "end": {
+      "dateTime": (config.endDateTime !== undefined && config.endDateTime !== null && config.endDateTime !== "" ? String(config.endDateTime) : "2026-10-01T15:00:00Z"),
+      "timeZone": (config.endTimeZone !== undefined && config.endTimeZone !== null && config.endTimeZone !== "" ? String(config.endTimeZone) : "UTC"),
+    },
+    "iCalUID": `${fake.hex(8)}-${fake.hex(4)}-${fake.hex(4)}-${fake.hex(4)}-${fake.hex(12)}`,
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true,
+    },
+    "eventType": "default",
+  };
+}
+
+function fakeEventDelete({ config, fake }: FakeRequest): unknown {
+  return {};
+}
+
 function fakeEventGet({ config, fake }: FakeRequest): unknown {
   const boundEventid = (config.eventId !== undefined && config.eventId !== null && config.eventId !== "" ? String(config.eventId) : fake.id("evt"));
 
@@ -139,6 +178,41 @@ function fakeEventList({ config, fake }: FakeRequest): unknown {
   };
 }
 
+function fakeEventUpdate({ config, fake }: FakeRequest): unknown {
+  return {
+    "kind": "calendar#event",
+    "etag": "\"3456789012345680\"",
+    "id": (config.eventId !== undefined && config.eventId !== null && config.eventId !== "" ? String(config.eventId) : fake.id("evt")),
+    "status": (config.status !== undefined && config.status !== null && config.status !== "" ? String(config.status) : "confirmed"),
+    "htmlLink": "https://www.google.com/calendar/event?eid=ZmFrZQ",
+    "created": "2026-09-01T09:00:00.000Z",
+    "updated": "2026-09-30T09:15:00.000Z",
+    "summary": (config.summary !== undefined && config.summary !== null && config.summary !== "" ? String(config.summary) : "Design review"),
+    "description": (config.description !== undefined && config.description !== null && config.description !== "" ? String(config.description) : ""),
+    "location": (config.location !== undefined && config.location !== null && config.location !== "" ? String(config.location) : ""),
+    "creator": {
+      "email": "ada@example.test",
+    },
+    "organizer": {
+      "email": "ada@example.test",
+    },
+    "start": {
+      "dateTime": (config.startDateTime !== undefined && config.startDateTime !== null && config.startDateTime !== "" ? String(config.startDateTime) : "2026-10-01T14:00:00Z"),
+      "timeZone": (config.startTimeZone !== undefined && config.startTimeZone !== null && config.startTimeZone !== "" ? String(config.startTimeZone) : "UTC"),
+    },
+    "end": {
+      "dateTime": (config.endDateTime !== undefined && config.endDateTime !== null && config.endDateTime !== "" ? String(config.endDateTime) : "2026-10-01T15:00:00Z"),
+      "timeZone": (config.endTimeZone !== undefined && config.endTimeZone !== null && config.endTimeZone !== "" ? String(config.endTimeZone) : "UTC"),
+    },
+    "iCalUID": `${fake.hex(8)}-${fake.hex(4)}-${fake.hex(4)}-${fake.hex(4)}-${fake.hex(12)}`,
+    "sequence": 1,
+    "reminders": {
+      "useDefault": true,
+    },
+    "eventType": "default",
+  };
+}
+
 function fakeEventsChanged({ config, fake }: FakeRequest): unknown {
   const boundChannelid = `${fake.hex(8)}-${fake.hex(4)}-${fake.hex(4)}-${fake.hex(4)}-${fake.hex(12)}`;
 
@@ -160,11 +234,20 @@ export const googleCalendarFaker: ConnectorFaker = (operation, request) => {
     case "channel_watch":
       return fakeChannelWatch(request);
 
+    case "event_create":
+      return fakeEventCreate(request);
+
+    case "event_delete":
+      return fakeEventDelete(request);
+
     case "event_get":
       return fakeEventGet(request);
 
     case "event_list":
       return fakeEventList(request);
+
+    case "event_update":
+      return fakeEventUpdate(request);
 
     case "events_changed":
       return fakeEventsChanged(request);

@@ -61,6 +61,67 @@ it('channel_watch fakes the shape Google Calendar publishes', function () {
     ]);
 });
 
+it('event_create fakes the shape Google Calendar publishes', function () {
+    $config = [];
+    $fake = new FakeValues(FakeValues::seedForCall('google_calendar', 'event_create', $config));
+
+    $faked = GoogleCalendarFaker::respond('event_create', ['config' => $config, 'fake' => $fake]);
+
+    // Through JSON and back, because a faked EMPTY object is a stdClass — the only
+    // PHP value that spells `{}` on the wire — and `toBe` compares objects by
+    // identity. This asserts the VALUES; the `{}`-versus-`[]` spelling is what
+    // weaver's cross-runtime parity suite asserts, byte for byte.
+    $faked = json_decode((string) json_encode($faked), true, 512, JSON_THROW_ON_ERROR);
+
+    expect($faked)->toBe([
+        'kind' => 'calendar#event',
+        'etag' => '"3456789012345679"',
+        'id' => 'evt_fake_d3810ed9b910',
+        'status' => 'confirmed',
+        'htmlLink' => 'https://www.google.com/calendar/event?eid=ZmFrZQ',
+        'created' => '2026-09-30T09:00:00.000Z',
+        'updated' => '2026-09-30T09:00:00.000Z',
+        'summary' => 'Design review',
+        'description' => '',
+        'location' => '',
+        'creator' => [
+            'email' => 'ada@example.test',
+        ],
+        'organizer' => [
+            'email' => 'ada@example.test',
+        ],
+        'start' => [
+            'dateTime' => '2026-10-01T14:00:00Z',
+            'timeZone' => 'UTC',
+        ],
+        'end' => [
+            'dateTime' => '2026-10-01T15:00:00Z',
+            'timeZone' => 'UTC',
+        ],
+        'iCalUID' => '2bf1920b-2faf-ac1d-9c18-c5d79473dc64',
+        'sequence' => 0,
+        'reminders' => [
+            'useDefault' => true,
+        ],
+        'eventType' => 'default',
+    ]);
+});
+
+it('event_delete fakes the shape Google Calendar publishes', function () {
+    $config = [];
+    $fake = new FakeValues(FakeValues::seedForCall('google_calendar', 'event_delete', $config));
+
+    $faked = GoogleCalendarFaker::respond('event_delete', ['config' => $config, 'fake' => $fake]);
+
+    // Through JSON and back, because a faked EMPTY object is a stdClass — the only
+    // PHP value that spells `{}` on the wire — and `toBe` compares objects by
+    // identity. This asserts the VALUES; the `{}`-versus-`[]` spelling is what
+    // weaver's cross-runtime parity suite asserts, byte for byte.
+    $faked = json_decode((string) json_encode($faked), true, 512, JSON_THROW_ON_ERROR);
+
+    expect($faked)->toBe([]);
+});
+
 it('event_get fakes the shape Google Calendar publishes', function () {
     $config = [];
     $fake = new FakeValues(FakeValues::seedForCall('google_calendar', 'event_get', $config));
@@ -175,6 +236,52 @@ it('event_list fakes the shape Google Calendar publishes', function () {
                 'eventType' => 'default',
             ],
         ],
+    ]);
+});
+
+it('event_update fakes the shape Google Calendar publishes', function () {
+    $config = [];
+    $fake = new FakeValues(FakeValues::seedForCall('google_calendar', 'event_update', $config));
+
+    $faked = GoogleCalendarFaker::respond('event_update', ['config' => $config, 'fake' => $fake]);
+
+    // Through JSON and back, because a faked EMPTY object is a stdClass — the only
+    // PHP value that spells `{}` on the wire — and `toBe` compares objects by
+    // identity. This asserts the VALUES; the `{}`-versus-`[]` spelling is what
+    // weaver's cross-runtime parity suite asserts, byte for byte.
+    $faked = json_decode((string) json_encode($faked), true, 512, JSON_THROW_ON_ERROR);
+
+    expect($faked)->toBe([
+        'kind' => 'calendar#event',
+        'etag' => '"3456789012345680"',
+        'id' => 'evt_fake_e5bd43aff4d8',
+        'status' => 'confirmed',
+        'htmlLink' => 'https://www.google.com/calendar/event?eid=ZmFrZQ',
+        'created' => '2026-09-01T09:00:00.000Z',
+        'updated' => '2026-09-30T09:15:00.000Z',
+        'summary' => 'Design review',
+        'description' => '',
+        'location' => '',
+        'creator' => [
+            'email' => 'ada@example.test',
+        ],
+        'organizer' => [
+            'email' => 'ada@example.test',
+        ],
+        'start' => [
+            'dateTime' => '2026-10-01T14:00:00Z',
+            'timeZone' => 'UTC',
+        ],
+        'end' => [
+            'dateTime' => '2026-10-01T15:00:00Z',
+            'timeZone' => 'UTC',
+        ],
+        'iCalUID' => 'dafba425-6195-345c-b729-85a6ffdc11f7',
+        'sequence' => 1,
+        'reminders' => [
+            'useDefault' => true,
+        ],
+        'eventType' => 'default',
     ]);
 });
 

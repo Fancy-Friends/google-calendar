@@ -1,0 +1,31 @@
+{
+  "$comment": "The event after a PATCH, echoing the touched fields and the id that was asked for -- the same trap as every other provider's get/update fixture, so a flow wiring {{ $json.data.id }} against the wrong event is caught rather than faked past.",
+  "operation": "event_update",
+
+  "response": {
+    "kind": "calendar#event",
+    "etag": "\"3456789012345680\"",
+    "id": { "$config": "eventId", "as": "string", "fallback": { "$fake": "id", "prefix": "evt" } },
+    "status": { "$config": "status", "as": "string", "default": "confirmed" },
+    "htmlLink": "https://www.google.com/calendar/event?eid=ZmFrZQ",
+    "created": "2026-09-01T09:00:00.000Z",
+    "updated": "2026-09-30T09:15:00.000Z",
+    "summary": { "$config": "summary", "as": "string", "fallback": "Design review" },
+    "description": { "$config": "description", "as": "string", "default": "" },
+    "location": { "$config": "location", "as": "string", "default": "" },
+    "creator": { "email": "ada@example.test" },
+    "organizer": { "email": "ada@example.test" },
+    "start": {
+      "dateTime": { "$config": "startDateTime", "as": "string", "fallback": "2026-10-01T14:00:00Z" },
+      "timeZone": { "$config": "startTimeZone", "as": "string", "default": "UTC" }
+    },
+    "end": {
+      "dateTime": { "$config": "endDateTime", "as": "string", "fallback": "2026-10-01T15:00:00Z" },
+      "timeZone": { "$config": "endTimeZone", "as": "string", "default": "UTC" }
+    },
+    "iCalUID": { "$fake": "uuid" },
+    "sequence": 1,
+    "reminders": { "useDefault": true },
+    "eventType": "default"
+  }
+}
