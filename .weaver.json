@@ -6,6 +6,7 @@
   "files": {
     ".gitattributes": "3b81cb009a60ff7f0762f24c5d336a4afd0284f2716e54c4823da08d839f664c",
     ".github/workflows/ci.yml": "2ce650c9ed899a4ca2376dc6e420612fc69c8bcca3deecdfde0384d0a8dd3b6c",
+    ".github/workflows/codeql.yml": "86648e08917b6403f7b243bfd3d7b60390a5a5e6745885cf90941e8d61d08bf1",
     ".github/workflows/publish.yml": "747d4930707535f1d7dd1a0ba12440b67482a1622364996b8372c1aec7e9cdaa",
     ".github/workflows/verify-published.yml": "7da66d4a72181d6f8dc2b5b2bf03a831dde981325b5446a282fa66aeb9ee1850",
     ".gitignore": "47a7633c70c1d1e6b3c17a782a105355accfb3495d6402f7f308256bf505e1ad",
