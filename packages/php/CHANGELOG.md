@@ -8,6 +8,23 @@ The four packages share one version, because they are generated from one
 `provider/` definition and a version that meant something different in each
 would be a version nobody could reason about.
 
+## [0.4.1] — 2026-11-08
+
+### Fixed
+
+- **The Laravel config's environment variable names now split camelCase**,
+  as documented. **Consumer action: none.** The old unsplit names are still
+  read as a fallback, so an app that set them keeps working; the new names
+  are preferred.
+
+  | Preferred | Still read |
+  |---|---|
+  | `GOOGLE_CALENDAR_CLIENT_ID` | `GOOGLE_CALENDAR_CLIENTID` |
+  | `GOOGLE_CALENDAR_CLIENT_SECRET` | `GOOGLE_CALENDAR_CLIENTSECRET` |
+  | `GOOGLE_CALENDAR_ACCESS_TOKEN` | `GOOGLE_CALENDAR_ACCESSTOKEN` |
+  | `GOOGLE_CALENDAR_REFRESH_TOKEN` | `GOOGLE_CALENDAR_REFRESHTOKEN` |
+  | `GOOGLE_CALENDAR_CHANNEL_TOKEN` | `GOOGLE_CALENDAR_CHANNELTOKEN` |
+
 ## [0.4.0] — 2026-11-08
 
 ### Added

@@ -20,14 +20,14 @@ return [
 
     'credentials' => [
         // OAuth client ID (one per installation).
-        'clientId' => env('GOOGLE_CALENDAR_CLIENTID'),
+        'clientId' => env('GOOGLE_CALENDAR_CLIENT_ID', env('GOOGLE_CALENDAR_CLIENTID')),
         // OAuth client secret (one per installation, secret).
-        'clientSecret' => env('GOOGLE_CALENDAR_CLIENTSECRET'),
+        'clientSecret' => env('GOOGLE_CALENDAR_CLIENT_SECRET', env('GOOGLE_CALENDAR_CLIENTSECRET')),
         // Access token (per connected account, secret).
-        'accessToken' => env('GOOGLE_CALENDAR_ACCESSTOKEN'),
+        'accessToken' => env('GOOGLE_CALENDAR_ACCESS_TOKEN', env('GOOGLE_CALENDAR_ACCESSTOKEN')),
         // Refresh token (per connected account, secret).
-        'refreshToken' => env('GOOGLE_CALENDAR_REFRESHTOKEN'),
+        'refreshToken' => env('GOOGLE_CALENDAR_REFRESH_TOKEN', env('GOOGLE_CALENDAR_REFRESHTOKEN')),
         // Channel token (per connected account, secret).
-        'channelToken' => env('GOOGLE_CALENDAR_CHANNELTOKEN'),
+        'channelToken' => env('GOOGLE_CALENDAR_CHANNEL_TOKEN', env('GOOGLE_CALENDAR_CHANNELTOKEN')),
     ],
 ];
