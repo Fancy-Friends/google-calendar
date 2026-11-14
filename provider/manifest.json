@@ -52,6 +52,63 @@
 
   "encoding": "json",
 
+  "summary": "Read and change Google Calendar events, and trigger on changes through Calendar push channels.",
+  "$setupComment": "Steps read from Google's docs on 2026-11-14 (each cites its page). Every Google connector shares one grant, so the first four steps are the same for all of them; do them once.",
+  "setup": [
+    {
+      "title": "Create (or reuse) the Google Cloud project for {{appName}}",
+      "detail": "Every Google connector shares ONE consent grant (oauth.grant \"google\"), so use one project and one OAuth client for all of them: one consent and one refresh token per person.",
+      "url": "https://developers.google.com/workspace/guides/create-project"
+    },
+    {
+      "title": "Enable the Google Calendar API",
+      "detail": "Console: APIs & Services, Library; open the Google Calendar API and click Enable.",
+      "url": "https://developers.google.com/workspace/guides/enable-apis"
+    },
+    {
+      "title": "Configure the consent screen",
+      "detail": "Console: Google Auth platform, Branding (app name {{appName}}, support email, contact email), then Audience: Internal for people inside your Google Workspace organisation only, or External (while it is in testing, add each tester under Test users). Then Data Access, Add or Remove Scopes, and add `https://www.googleapis.com/auth/calendar.events` beside the scopes of any other Google connector you use. You cannot remove the consent screen once it is configured.",
+      "url": "https://developers.google.com/workspace/guides/configure-oauth-consent"
+    },
+    {
+      "title": "Create a Web application OAuth client",
+      "detail": "Console: Google Auth platform, Clients, Create Client; type Web application. Under Authorized redirect URIs click Add URI and paste {{oauthRedirectUrl}}, then Create. Copy the client ID and client secret when the client is created.",
+      "url": "https://developers.google.com/workspace/guides/create-credentials",
+      "copy": [
+        {
+          "label": "Authorized redirect URI",
+          "value": "{{oauthRedirectUrl}}"
+        }
+      ],
+      "fields": [
+        "clientId",
+        "clientSecret"
+      ]
+    },
+    {
+      "title": "Give each connection a channel token, and serve {{webhookUrl}} over HTTPS",
+      "detail": "events_changed opens a channel whose notifications go to {{webhookUrl}}, which must be HTTPS with a valid certificate (self-signed, untrusted, revoked or wrong-host certificates are refused). Google echoes the channel token in X-Goog-Channel-Token on every notification, so generate a random token per connection and never put an OAuth token in it. A channel is never renewed automatically: replace it with a new watch before it expires.",
+      "url": "https://developers.google.com/workspace/calendar/api/guides/push",
+      "copy": [
+        {
+          "label": "Notification address",
+          "value": "{{webhookUrl}}"
+        }
+      ],
+      "fields": [
+        "channelToken"
+      ]
+    },
+    {
+      "title": "Connect an account and check it works",
+      "detail": "Connect one Google account through {{appName}}'s OAuth flow, then run the check below.",
+      "url": "https://developers.google.com/workspace/calendar/api/guides/push",
+      "actor": "agent",
+      "prompt": "Using {{appName}}'s {{connector}} connection, run event_list on the primary calendar and report how many events it returns. Then start a channel with channel_watch, ask the person to edit an event, and confirm {{appName}} received an events_changed notification whose channel token matched.",
+      "done": "event_list answers, and an edited event arrives as an events_changed notification with the right token."
+    }
+  ],
+
   "credentialFields": [
     {
       "key": "clientId",
